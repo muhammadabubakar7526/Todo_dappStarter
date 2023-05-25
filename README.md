@@ -4,8 +4,6 @@ A dApp starter kit template to quick start a dapp project with Next.js + Tailwin
 
 Other tools/components included: Headless UI, Heroicons, Autoprefixer, Sass, PostCSS, ESLint, Prettier.
 
-Live preview for this repo: https://dapp-starter.aris.ac
-
 ## Getting Started
 
 ```bash

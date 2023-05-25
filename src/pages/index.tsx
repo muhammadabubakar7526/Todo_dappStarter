@@ -27,7 +27,6 @@ function Main() {
   })
   const { openConnectModal } = useConnectModal()
   const { openAccountModal } = useAccountModal()
-  const { openChainModal } = useChainModal()
   return (
     <main className={styles.main + ' space-y-6'}>
       <div className="text-center">
@@ -42,48 +41,6 @@ function Main() {
             https://github.com/qalbehabib/dappStarter
           </a>
         </p>
-      </div>
-
-      <div>
-        <h4 className="text-center text-sm font-medium">demo: ConnectWalletBtn Full</h4>
-        <div className="flex w-full flex-col items-center">
-          <ConnectWallet />
-        </div>
-      </div>
-
-      <div>
-        <h4 className="text-center text-sm font-medium">demo: useModal (rainbowkit ^0.4.3)</h4>
-        <div className="flex w-full flex-col items-center">
-          {openConnectModal && (
-            <button
-              onClick={openConnectModal}
-              type="button"
-              className="m-1 rounded-lg bg-orange-500 py-1 px-3 text-white transition-all duration-150 hover:scale-105"
-            >
-              useConnectModal
-            </button>
-          )}
-
-          {openAccountModal && (
-            <button
-              onClick={openAccountModal}
-              type="button"
-              className="m-1 rounded-lg bg-orange-500 py-1 px-3 text-white transition-all duration-150 hover:scale-105"
-            >
-              useAccountModal
-            </button>
-          )}
-
-          {openChainModal && (
-            <button
-              onClick={openChainModal}
-              type="button"
-              className="m-1 rounded-lg bg-orange-500 py-1 px-3 text-white transition-all duration-150 hover:scale-105"
-            >
-              useChainModal
-            </button>
-          )}
-        </div>
       </div>
 
       <div className="w-full max-w-xl rounded-xl bg-sky-500/10 p-6 text-center">
@@ -103,7 +60,7 @@ function Main() {
           </dd>
           <dt>Connected Network</dt>
           <dd>{chain ? `${chain?.id}: ${chain?.name}` : 'n/a'}</dd>
-          <dt>Switch Network</dt>
+          <dt>Network</dt>
           <dd className="flex flex-wrap justify-center">
             {isConnected &&
               chains.map(x => (
@@ -137,7 +94,7 @@ function Main() {
 }
 
 function SignMsg() {
-  const [msg, setMsg] = useState('Dapp Starter')
+  const [msg, setMsg] = useState('Qalb E Habib')
   const { data, isError, isLoading, isSuccess, signMessage } = useSignMessage({
     message: msg,
   })
@@ -160,7 +117,7 @@ function SignMsg() {
         </button>
       </p>
       <p>
-        {isSuccess && <span>Signature: {data}</span>}
+        {isSuccess && <span>Signature:{data}</span>}
         {isError && <span>Error signing message</span>}
       </p>
     </>
