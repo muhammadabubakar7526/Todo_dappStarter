@@ -19,7 +19,7 @@ import {
 } from '@rainbow-me/rainbowkit/wallets'
 import { Chain } from '@rainbow-me/rainbowkit'
 import { mainnet, polygon, optimism, arbitrum } from 'wagmi/chains'
-import { createClient, configureChains, WagmiConfig } from 'wagmi'
+import { createClient, configureChains, WagmiConfig, goerli } from 'wagmi'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
@@ -71,12 +71,12 @@ const gnosisChain: Chain = {
 
 // Web3 Configs
 const { chains, provider } = configureChains(
-  [mainnet, polygon, optimism, arbitrum, gnosisChain],
+  [goerli],
   [
     infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID !== '' && process.env.NEXT_PUBLIC_INFURA_ID }),
     jsonRpcProvider({
       rpc: chain => {
-        if (chain.id !== gnosisChain.id) return null
+        if (chain.id !== goerli.id) return null
         return {
           http: `${chain.rpcUrls.default}`,
         }
@@ -98,13 +98,13 @@ const connectors = connectorsForWallets([
     groupName: 'Recommended',
     wallets: [injectedWallet({ chains }), metaMaskWallet({ chains }), walletConnectWallet({ chains })],
   },
-  {
-    groupName: 'Other Wallets',
-    wallets: otherWallets,
-  },
+  // {
+  //   groupName: 'Other Wallets',
+  //   wallets: otherWallets,
+  // },
 ])
 
-const wagmiClient = createClient({ autoConnect: true, connectors, provider })
+const wagmiClient = createClient({ autoConnect: false, connectors, provider })
 
 // Web3Wrapper
 export function Web3Wrapper({ children }) {
@@ -122,9 +122,10 @@ export function Web3Wrapper({ children }) {
           learnMoreUrl: app.url,
         }}
         chains={chains}
-        initialChain={1} // Optional, initialChain={1}, initialChain={chain.mainnet}, initialChain={gnosisChain}
+        initialChain={chains[0].id}
         showRecentTransactions={true}
         theme={resolvedTheme === 'dark' ? darkTheme() : lightTheme()}
+        modalSize="compact"
       >
         {children}
       </RainbowKitProvider>

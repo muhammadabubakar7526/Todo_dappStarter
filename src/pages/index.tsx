@@ -6,6 +6,7 @@ import ConnectWallet from 'components/Connect/ConnectWallet'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useConnectModal, useAccountModal, useChainModal } from '@rainbow-me/rainbowkit'
 import { useSignMessage } from 'wagmi'
+import Header from 'components/Header'
 
 export default function Home() {
   return (
@@ -14,24 +15,6 @@ export default function Home() {
       <Main />
       <Footer />
     </div>
-  )
-}
-
-function Header() {
-  return (
-    <header className={styles.header}>
-      <div>
-        <ThemeToggleList />
-      </div>
-      <div className="flex items-center">
-        <ThemeToggleButton /> header <ThemeToggleList />
-      </div>
-
-      <div className="flex items-center">
-        <ThemeToggleButton />
-        <ThemeToggleList />
-      </div>
-    </header>
   )
 }
 
@@ -48,15 +31,15 @@ function Main() {
   return (
     <main className={styles.main + ' space-y-6'}>
       <div className="text-center">
-        <p className="font-medium">Dapp Starter Boilerplate by arisac.eth</p>
+        <p className="font-medium">Dapp Starter Boilerplate by Qalbehabib</p>
         <p>
           <a
-            href="https://github.com/arisac/dapp-starter"
+            href="https://github.com/qalbehabib/dappStarter"
             target="_blank"
             className="text-sm underline"
             rel="noreferrer"
           >
-            https://github.com/arisac/dapp-starter
+            https://github.com/qalbehabib/dappStarter
           </a>
         </p>
       </div>
@@ -187,17 +170,9 @@ function SignMsg() {
 function Footer() {
   return (
     <footer className={styles.footer}>
-      <div>
-        <ThemeToggleList />
-      </div>
-      <div className="flex items-center">
-        <ThemeToggleButton /> footer <ThemeToggleList />
-      </div>
-
-      <div className="flex items-center">
-        <ThemeToggleButton />
-        <ThemeToggleList />
-      </div>
+      <div />
+      <div className="flex items-center">Made With ❤️ by QalbeHabib</div>
+      <div />
     </footer>
   )
 }
