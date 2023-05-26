@@ -7,6 +7,8 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useConnectModal, useAccountModal, useChainModal } from '@rainbow-me/rainbowkit'
 import { useSignMessage } from 'wagmi'
 import Header from 'components/Header'
+import Images from 'components/Common/Images'
+import JazzIcon from 'components/Common/JazzIcon'
 
 export default function Home() {
   return (
@@ -29,6 +31,7 @@ function Main() {
   const { openAccountModal } = useAccountModal()
   return (
     <main className={styles.main + ' space-y-6'}>
+      <JazzIcon diameter={100} seed='sdasdasdasad233123asds' radius='10px' />
       <div className="text-center">
         <p className="font-medium">Dapp Starter Boilerplate by Qalbehabib</p>
         <p>
