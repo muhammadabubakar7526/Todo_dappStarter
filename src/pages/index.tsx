@@ -1,7 +1,12 @@
 import styles from 'styles/Home.module.scss'
 import { ThemeToggleButton, ThemeToggleList } from 'components/Theme'
 import { useState } from 'react'
-import { useNetwork, useSwitchNetwork, useAccount, useBalance } from 'wagmi'
+import {
+ useNetwork,
+ useSwitchNetwork,
+ useAccount,
+ useContractWrite,
+} from 'wagmi'
 import ConnectWallet from 'components/Connect/ConnectWallet'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import {
@@ -12,6 +17,8 @@ import {
 import { useSignMessage } from 'wagmi'
 import Header from 'components/Header'
 import useWhitelistData from 'hooks/useWhitelistData'
+import { whitelistAddress } from 'constant/abi/contractAddress'
+import WHITELISTABI from '../constant/abi/whitelistDapp.json'
 
 export default function Home() {
  return (
@@ -25,6 +32,7 @@ export default function Home() {
 
 function Main() {
  const { address, isConnected, connector } = useAccount()
+
  const { chain, chains } = useNetwork()
  const {
   isLoading: isNetworkLoading,
@@ -37,11 +45,17 @@ function Main() {
   'whiteListedAddress',
   address
  )
- const { data: balance, isLoading: isBalanceLoading } = useBalance({
-  address: address,
- })
- const { openConnectModal } = useConnectModal()
- const { openAccountModal } = useAccountModal()
+
+ const { getAddToWhiteList } = useWhitelistData()
+ console.log({ getAddToWhiteList })
+ async function addToWhiteList() {
+  try {
+   getAddToWhiteList()
+   // here to call the write function
+  } catch (err) {
+   console.error(err)
+  }
+ }
  return (
   <main className={styles.main + ' min-h-screen space-y-6'}>
    <>
@@ -51,25 +65,30 @@ function Main() {
        <h1 className="text-5xl font-bold">Join WhiteList</h1>
        <p className="py-6">
         Let get into the whiteList to be a part of Crypto Dev and have the early
-        access of your Crypto Dev NFT, the worth $ Millions
+        access of your Crypto Dev NFT, that worth Millions of $.
        </p>
       </div>
+      {/*  */}
       <div className="card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl">
-       <div className="card-body">
-        <div className="form-control">
-         <label className="label">
-          <span className="label-text text-xl font-bold">Wallet Address</span>
-         </label>
-         <input
-          type="text"
-          placeholder="email"
-          className="input-bordered input"
-         />
-        </div>
-        <div className="form-control"></div>
-        <div className="form-control ">
-         <button className="btn-primary btn">Join Now</button>
-        </div>
+       <div className="card-body gap-y-3">
+        <h3 className="font-bold">
+         MaxAddress: <span>{maxWhitelist ? maxWhitelist : 0}</span>
+        </h3>
+        <h3 className="font-bold">
+         Total White Listed:{' '}
+         <span>{totalWhitelisted ? totalWhitelisted : 0}</span>
+        </h3>
+        <h3 className="font-bold">
+         You are WiteListed? :{' '}
+         <span
+          className={whiteListedAddress ? 'text-green-500' : 'text-red-500'}
+         >
+          {whiteListedAddress ? 'True' : 'False'}
+         </span>
+        </h3>
+        <button className="btn-primary btn" onClick={() => addToWhiteList()}>
+         Add Me to WhiteList{' '}
+        </button>
        </div>
       </div>
      </div>
