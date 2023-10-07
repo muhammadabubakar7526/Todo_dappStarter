@@ -15,6 +15,8 @@ import {
  useChainModal,
 } from '@rainbow-me/rainbowkit'
 import { useSignMessage } from 'wagmi'
+import { ethers } from 'ethers'
+import abi from 'constant/abi/buy.json'
 import Header from 'components/Header'
 import useWhitelistData from 'hooks/useWhitelistData'
 import { whitelistAddress } from 'constant/abi/contractAddress'
@@ -47,7 +49,7 @@ function Main() {
  )
 
  const { getAddToWhiteList } = useWhitelistData()
- console.log({ getAddToWhiteList })
+ //  console.log({ getAddToWhiteList })
  async function addToWhiteList() {
   try {
    getAddToWhiteList()
@@ -56,44 +58,110 @@ function Main() {
    console.error(err)
   }
  }
+ const [value, setValue] = useState('')
+
+ const buyToken = async () => {
+  alert('clicked')
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
+  let contract
+  contract = new ethers.Contract(
+   '0xD890a2c65D8222f121Bb61C3cf873705ec838913',
+   abi,
+   provider
+  )
+  const signer = provider.getSigner()
+  const Contract = contract.connect(signer)
+  // setLoading(true);
+  await Contract.buyTokens(value)
+  alert('success')
+  // setLoading(false);
+ }
  return (
+  //   <main className={styles.main + ' min-h-screen space-y-6'}>
+  //    <>
+  //     <div className="flex w-full border border-red-500 ">
+  //      <div className="border border-green-900">
+  //       <h1 className="font-bold text-white">Buy Tokens</h1>
+  //       <div className="border-white-90 flex flex-col items-start gap-6 rounded-lg border p-6">
+  //        <input
+  //         id="buy1"
+  //         onChange={e => {
+  //          console.log(e.currentTarget.value)
+  //          setValue(e.currentTarget.value)
+  //         }}
+  //         className="w-[300px] rounded p-2"
+  //         placeholder="Enter Amount"
+  //        />
+  //        <button className="rounded bg-blue-800 px-2 py-1" onClick={buyToken}>
+  //         Buy Token
+  //        </button>
+  //       </div>
+  //      </div>
+
+  //      <div>
+  //       <h1 className="font-bold text-white">Add Tokens</h1>
+  //       <div className="border-white-90 flex flex-col items-center justify-center gap-6 rounded-lg border p-6">
+  //        <input
+  //         id="buy1"
+  //         onChange={e => {
+  //          console.log(e.currentTarget.value)
+  //          setValue(e.currentTarget.value)
+  //         }}
+  //         className="w-[300px] rounded p-2"
+  //         placeholder="Enter Amount"
+  //        />
+  //        <button className="rounded bg-blue-800 px-2 py-1" onClick={buyToken}>
+  //         Add Token
+  //        </button>
+  //       </div>
+  //      </div>
+  //     </div>
+  //    </>
+  //   </main>
   <main className={styles.main + ' min-h-screen space-y-6'}>
-   <>
-    <div className="hero  bg-base-200">
-     <div className="hero-content flex-col ">
-      <div className="max-w-md text-center ">
-       <h1 className="text-5xl font-bold">Join WhiteList</h1>
-       <p className="py-6">
-        Let get into the whiteList to be a part of Crypto Dev and have the early
-        access of your Crypto Dev NFT, that worth Millions of $.
-       </p>
-      </div>
-      {/*  */}
-      <div className="card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl">
-       <div className="card-body gap-y-3">
-        <h3 className="font-bold">
-         MaxAddress: <span>{maxWhitelist ? maxWhitelist : 0}</span>
-        </h3>
-        <h3 className="font-bold">
-         Total White Listed:{' '}
-         <span>{totalWhitelisted ? totalWhitelisted : 0}</span>
-        </h3>
-        <h3 className="font-bold">
-         You are WiteListed? :{' '}
-         <span
-          className={whiteListedAddress ? 'text-green-500' : 'text-red-500'}
-         >
-          {whiteListedAddress ? 'True' : 'False'}
-         </span>
-        </h3>
-        <button className="btn-primary btn" onClick={() => addToWhiteList()}>
-         Add Me to WhiteList{' '}
-        </button>
-       </div>
-      </div>
+   <div className="flex w-full flex-col space-y-6 md:flex-row md:space-y-0">
+    <div className="p-4 md:w-1/2">
+     <div className="rounded-lg border border-green-900 p-6">
+      <h1 className="mb-4 text-center font-bold text-white">Buy Tokens</h1>
+      <input
+       id="buy1"
+       onChange={e => {
+        console.log(e.currentTarget.value)
+        setValue(e.currentTarget.value)
+       }}
+       className="mb-4 w-full rounded p-2 "
+       placeholder="Enter Amount"
+      />
+      <button
+       className="w-full rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+       onClick={buyToken}
+      >
+       Buy Token
+      </button>
      </div>
     </div>
-   </>
+
+    <div className="p-4 md:w-1/2">
+     <div className="rounded-lg border border-green-900 p-6">
+      <h1 className="mb-4 text-center font-bold text-white">Add Tokens</h1>
+      <input
+       id="buy2"
+       onChange={e => {
+        console.log(e.currentTarget.value)
+        setValue(e.currentTarget.value)
+       }}
+       className="mb-4 w-full rounded p-2 "
+       placeholder="Enter Amount"
+      />
+      <button
+       className="w-full rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
+       //    onClick={addToken}
+      >
+       Add Token
+      </button>
+     </div>
+    </div>
+   </div>
   </main>
  )
 }
@@ -145,7 +213,7 @@ function Footer() {
  return (
   <footer className={styles.footer}>
    <div />
-   <div className="flex items-center">Made With ❤️ by QalbeHabib</div>
+   {/* <div className="flex items-center"> ❤️ </div> */}
    <div />
   </footer>
  )

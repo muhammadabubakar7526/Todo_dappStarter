@@ -7,33 +7,38 @@ import { app } from 'appConfig'
 import { useState, useEffect } from 'react'
 import HeadGlobal from 'components/HeadGlobal'
 // Web3Wrapper deps:
-import { connectorsForWallets, RainbowKitProvider, lightTheme, darkTheme } from '@rainbow-me/rainbowkit'
 import {
-  injectedWallet,
-  metaMaskWallet,
-  braveWallet,
-  coinbaseWallet,
-  walletConnectWallet,
-  ledgerWallet,
-  rainbowWallet,
+ connectorsForWallets,
+ RainbowKitProvider,
+ lightTheme,
+ darkTheme,
+} from '@rainbow-me/rainbowkit'
+import {
+ injectedWallet,
+ metaMaskWallet,
+ braveWallet,
+ coinbaseWallet,
+ walletConnectWallet,
+ ledgerWallet,
+ rainbowWallet,
 } from '@rainbow-me/rainbowkit/wallets'
 import { Chain } from '@rainbow-me/rainbowkit'
-import { mainnet, polygon, optimism, arbitrum } from 'wagmi/chains'
+import { mainnet, polygon, optimism, arbitrum, sepolia } from 'wagmi/chains'
 import { createClient, configureChains, WagmiConfig, goerli } from 'wagmi'
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
 function App({ Component, pageProps }: AppProps) {
-  const router = useRouter()
-  return (
-    <ThemeProvider defaultTheme="system" attribute="class">
-      <HeadGlobal />
-      <Web3Wrapper>
-        <Component key={router.asPath} {...pageProps} />
-      </Web3Wrapper>
-    </ThemeProvider>
-  )
+ const router = useRouter()
+ return (
+  <ThemeProvider defaultTheme="system" attribute="class">
+   <HeadGlobal />
+   <Web3Wrapper>
+    <Component key={router.asPath} {...pageProps} />
+   </Web3Wrapper>
+  </ThemeProvider>
+ )
 }
 export default App
 
@@ -41,94 +46,103 @@ export default App
 // Demo purpose, gnosis is included in wagmi/chains
 // import { gnosis } from 'wagmi/chains'
 const gnosisChain: Chain = {
-  id: 100,
+ id: 100,
+ name: 'Gnosis',
+ network: 'gnosis',
+ iconUrl:
+  'https://uploads-ssl.webflow.com/63692bf32544bee8b1836ea6/637b0145cf7e15b7fbffd51a_favicon-256.png',
+ iconBackground: '#000',
+ nativeCurrency: {
+  decimals: 18,
   name: 'Gnosis',
-  network: 'gnosis',
-  iconUrl: 'https://uploads-ssl.webflow.com/63692bf32544bee8b1836ea6/637b0145cf7e15b7fbffd51a_favicon-256.png',
-  iconBackground: '#000',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'Gnosis',
-    symbol: 'xDAI',
+  symbol: 'xDAI',
+ },
+ rpcUrls: {
+  default: {
+   http: ['https://gnosischain-rpc.gateway.pokt.network'],
   },
-  rpcUrls: {
-    default: {
-      http: ['https://gnosischain-rpc.gateway.pokt.network'],
-    },
+ },
+ blockExplorers: {
+  etherscan: {
+   name: 'Gnosisscan',
+   url: 'https://gnosisscan.io/',
   },
-  blockExplorers: {
-    etherscan: {
-      name: 'Gnosisscan',
-      url: 'https://gnosisscan.io/',
-    },
-    default: {
-      name: 'Gnosis Chain Explorer',
-      url: 'https://blockscout.com/xdai/mainnet/',
-    },
+  default: {
+   name: 'Gnosis Chain Explorer',
+   url: 'https://blockscout.com/xdai/mainnet/',
   },
-  testnet: false,
+ },
+ testnet: false,
 }
 
 // Web3 Configs
 const { chains, provider } = configureChains(
-  [goerli],
-  [
-    infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_ID !== '' && process.env.NEXT_PUBLIC_INFURA_ID }),
-    jsonRpcProvider({
-      rpc: chain => {
-        if (chain.id !== goerli.id) return null
-        return {
-          http: `${chain.rpcUrls.default}`,
-        }
-      },
-    }),
-    publicProvider(),
-  ]
+ [goerli, sepolia],
+ [
+  infuraProvider({
+   apiKey:
+    process.env.NEXT_PUBLIC_INFURA_ID !== '' &&
+    process.env.NEXT_PUBLIC_INFURA_ID,
+  }),
+  jsonRpcProvider({
+   rpc: chain => {
+    if (chain.id !== goerli.id) return null
+    return {
+     http: `${chain.rpcUrls.default}`,
+    }
+   },
+  }),
+  publicProvider(),
+ ]
 )
 
 const otherWallets = [
-  braveWallet({ chains }),
-  ledgerWallet({ chains }),
-  coinbaseWallet({ chains, appName: app.name }),
-  rainbowWallet({ chains }),
+ braveWallet({ chains }),
+ ledgerWallet({ chains }),
+ coinbaseWallet({ chains, appName: app.name }),
+ rainbowWallet({ chains }),
 ]
 
 const connectors = connectorsForWallets([
-  {
-    groupName: 'Recommended',
-    wallets: [injectedWallet({ chains }), metaMaskWallet({ chains }), walletConnectWallet({ chains })],
-  },
-  // {
-  //   groupName: 'Other Wallets',
-  //   wallets: otherWallets,
-  // },
+ {
+  groupName: 'Recommended',
+  wallets: [
+   injectedWallet({ chains }),
+   metaMaskWallet({ chains }),
+   walletConnectWallet({ chains }),
+  ],
+ },
+ // {
+ //   groupName: 'Other Wallets',
+ //   wallets: otherWallets,
+ // },
 ])
 
 const wagmiClient = createClient({ autoConnect: false, connectors, provider })
 
 // Web3Wrapper
 export function Web3Wrapper({ children }) {
-  const [mounted, setMounted] = useState(false)
-  const { resolvedTheme } = useTheme()
+ const [mounted, setMounted] = useState(false)
+ const { resolvedTheme } = useTheme()
 
-  useEffect(() => setMounted(true), [])
-  if (!mounted) return null
+ useEffect(() => setMounted(true), [])
+ if (!mounted) return null
 
-  return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider
-        appInfo={{
-          appName: app.name,
-          learnMoreUrl: app.url,
-        }}
-        chains={chains}
-        initialChain={chains[0].id}
-        showRecentTransactions={true}
-        theme={resolvedTheme === 'dark' ? darkTheme() : lightTheme()}
-        modalSize="compact"
-      >
-        {children}
-      </RainbowKitProvider>
-    </WagmiConfig>
-  )
+ return (
+  <WagmiConfig client={wagmiClient}>
+   <RainbowKitProvider
+    appInfo={{
+     appName: app.name,
+     learnMoreUrl: app.url,
+    }}
+    chains={chains}
+    initialChain={chains[0].id}
+    showRecentTransactions={true}
+    theme={resolvedTheme === 'dark' ? darkTheme() : lightTheme()}
+    modalSize="compact"
+   >
+    {children}
+   </RainbowKitProvider>
+  </WagmiConfig>
+ )
 }
