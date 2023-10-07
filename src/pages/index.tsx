@@ -21,7 +21,7 @@ import Header from 'components/Header'
 import useWhitelistData from 'hooks/useWhitelistData'
 import { whitelistAddress } from 'constant/abi/contractAddress'
 import WHITELISTABI from '../constant/abi/whitelistDapp.json'
-import { BiEditAlt } from 'react-icons/Bi'
+import { FaPencilAlt } from 'react-icons/fa'
 
 export default function Home() {
  return (
@@ -165,7 +165,8 @@ function Main() {
          className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-blue-500 p-2 text-white hover:bg-blue-600 focus:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
          {/* <BsGrid3X3GapFill /> */}
-         <BiEditAlt />
+         {/* edit */}
+         <FaPencilAlt />
         </button>
        </div>
       </li>
