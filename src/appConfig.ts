@@ -1,5 +1,5 @@
 export const app: { [key: string]: string } = {
- name: 'Buy Tokens', // web app name
+ name: 'Todo List', // web app name
  title: 'WhiteList Dapp', // website title
  developer: 'Qalb',
  description: 'Testing WhiteList Dapp for the early accessors users', // description of website

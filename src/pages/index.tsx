@@ -21,6 +21,7 @@ import Header from 'components/Header'
 import useWhitelistData from 'hooks/useWhitelistData'
 import { whitelistAddress } from 'constant/abi/contractAddress'
 import WHITELISTABI from '../constant/abi/whitelistDapp.json'
+import { BiEditAlt } from 'react-icons/Bi'
 
 export default function Home() {
  return (
@@ -76,92 +77,127 @@ function Main() {
   alert('success')
   // setLoading(false);
  }
- return (
-  //   <main className={styles.main + ' min-h-screen space-y-6'}>
-  //    <>
-  //     <div className="flex w-full border border-red-500 ">
-  //      <div className="border border-green-900">
-  //       <h1 className="font-bold text-white">Buy Tokens</h1>
-  //       <div className="border-white-90 flex flex-col items-start gap-6 rounded-lg border p-6">
-  //        <input
-  //         id="buy1"
-  //         onChange={e => {
-  //          console.log(e.currentTarget.value)
-  //          setValue(e.currentTarget.value)
-  //         }}
-  //         className="w-[300px] rounded p-2"
-  //         placeholder="Enter Amount"
-  //        />
-  //        <button className="rounded bg-blue-800 px-2 py-1" onClick={buyToken}>
-  //         Buy Token
-  //        </button>
-  //       </div>
-  //      </div>
 
-  //      <div>
-  //       <h1 className="font-bold text-white">Add Tokens</h1>
-  //       <div className="border-white-90 flex flex-col items-center justify-center gap-6 rounded-lg border p-6">
-  //        <input
-  //         id="buy1"
-  //         onChange={e => {
-  //          console.log(e.currentTarget.value)
-  //          setValue(e.currentTarget.value)
-  //         }}
-  //         className="w-[300px] rounded p-2"
-  //         placeholder="Enter Amount"
-  //        />
-  //        <button className="rounded bg-blue-800 px-2 py-1" onClick={buyToken}>
-  //         Add Token
-  //        </button>
-  //       </div>
-  //      </div>
-  //     </div>
-  //    </>
-  //   </main>
-  <main className={styles.main + ' min-h-screen space-y-6'}>
-   <div className="flex w-full flex-col space-y-6 md:flex-row md:space-y-0">
-    <div className="p-4 md:w-1/2">
-     <div className="rounded-lg border border-green-900 p-6">
-      <h1 className="mb-4 text-center font-bold text-white">Buy Tokens</h1>
-      <input
-       id="buy1"
-       onChange={e => {
-        console.log(e.currentTarget.value)
-        setValue(e.currentTarget.value)
-       }}
-       className="mb-4 w-full rounded p-2 "
-       placeholder="Enter Amount"
-      />
-      <button
-       className="w-full rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-       onClick={buyToken}
-      >
-       Buy Token
-      </button>
-     </div>
+ function StateArray() {
+  const [fruits, setFruits] = useState([])
+  const [currentTask, setCurrentTask] = useState('')
+  const [editedTask, setEditedTask] = useState('')
+  const [editedIndex, setEditedIndex] = useState(-1)
+
+  function updateCurrentFruit(text) {
+   setCurrentTask(text)
+  }
+
+  function addTaskToArray() {
+   const newFruits = [...fruits, currentTask]
+   setFruits(newFruits)
+   setCurrentTask('')
+  }
+  function DelTaskToArray(index) {
+   const newFruits = [...fruits.slice(0, index), ...fruits.slice(index + 1)]
+   setFruits(newFruits)
+   setCurrentTask('')
+  }
+
+  function EditTaskToArray(index, editedValue) {
+   const newFruits = [...fruits]
+   newFruits[index] = editedValue
+   setFruits(newFruits)
+   setCurrentTask('')
+   setEditedIndex(-1) // Clear edited index when saving
+  }
+
+  //   function DelFruitFromArray(index) {
+  //    // Create a new array without the fruit at the specified index
+  //    const newFruits = [...fruits.slice(0, index), ...fruits.slice(index + 1)]
+
+  //    // Update the fruits state with the new array
+  //    setFruits(newFruits)
+  //   }
+
+  return (
+   <div className="mx-auto w-full max-w-md rounded-lg border border-gray-300 bg-white p-4 shadow-lg">
+    <div className="mb-4">
+     <input
+      type="text"
+      value={currentTask}
+      onChange={e => updateCurrentFruit(e.target.value)}
+      className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter Task"
+     />
+    </div>
+    <div className="mb-4">
+     <button
+      onClick={addTaskToArray}
+      className="w-full rounded-lg bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-600 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+     >
+      ADD TASK
+     </button>
     </div>
 
-    <div className="p-4 md:w-1/2">
-     <div className="rounded-lg border border-green-900 p-6">
-      <h1 className="mb-4 text-center font-bold text-white">Add Tokens</h1>
+    <ul>
+     {/* {fruits.map((fruit, index) => (
+      <li key={index} className="mb-2 text-gray-700">
+       {index + 1}. {fruit}
+       <button onClick={() => DelFruitToArray(index)}>D</button>
+      </li>
+     ))} */}
+     {fruits.map((fruit, index) => (
+      <li
+       key={index}
+       className="mb-2 flex items-center justify-between text-gray-700"
+      >
+       <span>
+        {index + 1}. {fruit}
+       </span>
+       <div className="flex gap-2">
+        <button
+         onClick={() => DelTaskToArray(index)}
+         className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-red-500 p-2 text-white hover:bg-red-600 focus:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+        >
+         &#10005; {/* Cross symbol */}
+        </button>
+        <button
+         onClick={() => {
+          setEditedIndex(index)
+          setEditedTask(fruit)
+         }}
+         className="flex h-[30px] w-[30px] items-center justify-center rounded-full bg-blue-500 p-2 text-white hover:bg-blue-600 focus:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+         {/* <BsGrid3X3GapFill /> */}
+         <BiEditAlt />
+        </button>
+       </div>
+      </li>
+     ))}
+    </ul>
+
+    {editedIndex !== -1 && (
+     <div>
       <input
-       id="buy2"
-       onChange={e => {
-        console.log(e.currentTarget.value)
-        setValue(e.currentTarget.value)
-       }}
-       className="mb-4 w-full rounded p-2 "
-       placeholder="Enter Amount"
+       type="text"
+       value={editedTask}
+       onChange={e => setEditedTask(e.target.value)}
+       className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
+       placeholder="Edit Task "
       />
       <button
-       className="w-full rounded bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-700"
-       //    onClick={addToken}
+       onClick={() => {
+        EditTaskToArray(editedIndex, editedTask)
+        setEditedIndex(-1) // Clear edited index when saving
+       }}
+       className="mt-2 w-full rounded-lg bg-blue-500 py-2 px-4 font-bold text-white hover:bg-blue-600 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-       Add Token
+       Save
       </button>
      </div>
-    </div>
+    )}
    </div>
+  )
+ }
+ return (
+  <main className={styles.main + ' min-h-screen space-y-6'}>
+   <StateArray />
   </main>
  )
 }
@@ -213,7 +249,10 @@ function Footer() {
  return (
   <footer className={styles.footer}>
    <div />
-   {/* <div className="flex items-center"> ❤️ </div> */}
+   <div className="flex items-center">
+    {' '}
+    ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️{' '}
+   </div>
    <div />
   </footer>
  )
